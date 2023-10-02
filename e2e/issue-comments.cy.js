@@ -68,4 +68,67 @@ describe('Issue comments creating, editing and deleting', () => {
             .find('[data-testid="issue-comment"]')
             .should('not.exist');
     });
-});
+
+    it.only('Should add, update and delete a comment successfully', () => {
+        const comment = 'new comment goes here';
+        const previousComment = 'comment goes here';
+
+        getIssueDetailsModal().within(() => {
+            cy.contains('Add a comment...')
+                .click();
+
+            cy.get('textarea[placeholder="Add a comment..."]').type(previousComment);
+
+            cy.contains('button', 'Save')
+                .click()
+                .should('not.exist');
+
+            cy.contains('Add a comment...').should('exist');
+            cy.get('[data-testid="issue-comment"]').should('contain', previousComment);
+
+        });
+    
+
+        getIssueDetailsModal().within(() => {
+            cy.get('[data-testid="issue-comment"]')
+                .first()
+                .contains('Edit')
+                .click()
+                .should('not.exist');
+
+            cy.get('textarea[placeholder="Add a comment..."]')
+                .should('contain', previousComment)
+                .clear()
+                .type(comment);
+
+            cy.contains('button', 'Save')
+                .click()
+                .should('not.exist');
+
+            cy.get('[data-testid="issue-comment"]')
+                .should('contain', 'Edit')
+                .and('contain', comment);
+            })
+
+            getIssueDetailsModal()
+           cy.get('[data-testid="issue-comment"]')
+           .first()
+            .contains('Delete')
+            .click();
+
+        cy.get('[data-testid="modal:confirm"]')
+            .contains('button', 'Delete comment')
+            .click() 
+        
+
+        cy.get('[data-testid="modal:confirm"]').should('not.exist')
+   
+        getIssueDetailsModal()
+            .find('[data-testid="issue-comment"]').eq(0)
+            .should('not.contain', comment);
+
+        cy.get('[data-testid="icon:close"]').eq(0).click()
+    
+    })
+
+})
