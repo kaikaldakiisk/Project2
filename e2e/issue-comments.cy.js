@@ -69,7 +69,7 @@ describe('Issue comments creating, editing and deleting', () => {
             .should('not.exist');
     });
 
-    it.only('Should add, update and delete a comment successfully', () => {
+    it('Should add, update and delete a comment successfully', () => {
         const comment = 'new comment goes here';
         const previousComment = 'comment goes here';
 
@@ -87,7 +87,7 @@ describe('Issue comments creating, editing and deleting', () => {
             cy.get('[data-testid="issue-comment"]').should('contain', previousComment);
 
         });
-    
+
 
         getIssueDetailsModal().within(() => {
             cy.get('[data-testid="issue-comment"]')
@@ -108,27 +108,27 @@ describe('Issue comments creating, editing and deleting', () => {
             cy.get('[data-testid="issue-comment"]')
                 .should('contain', 'Edit')
                 .and('contain', comment);
-            })
+        })
 
-            getIssueDetailsModal()
-           cy.get('[data-testid="issue-comment"]')
-           .first()
+        getIssueDetailsModal()
+        cy.get('[data-testid="issue-comment"]')
+            .first()
             .contains('Delete')
             .click();
 
         cy.get('[data-testid="modal:confirm"]')
             .contains('button', 'Delete comment')
-            .click() 
-        
+            .click()
+
 
         cy.get('[data-testid="modal:confirm"]').should('not.exist')
-   
+
         getIssueDetailsModal()
             .find('[data-testid="issue-comment"]').eq(0)
             .should('not.contain', comment);
 
         cy.get('[data-testid="icon:close"]').eq(0).click()
-    
+
     })
 
 })
